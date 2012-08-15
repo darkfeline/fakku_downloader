@@ -117,7 +117,7 @@ class App:
         self.url_label = Label(row1, text='URL')
         self.url_label.pack(side=LEFT)
         self.url = Entry(row1)
-        self.name.bind('<Return>', self.dl)
+        self.url.bind('<Return>', self.dl)
         self.url.pack(side=LEFT)
 
         self.name_label = Label(row2, text='Name')
