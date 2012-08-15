@@ -1,0 +1,1 @@
+python fakku.py -g
