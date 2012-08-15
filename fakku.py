@@ -14,7 +14,11 @@ from tkinter import *
 
 re_pages = re.compile(r'<b>([0-9]+)</b> pages')
 re_url = re.compile(r"return '(.+?)' \+ x \+ '\.jpg';")
+re_title = re.compile(r'<h1 itemprop="name">(.*)</h1>')
+re_author = re.compile(r'<a href="/artists/.*>(.*)</a></div>')
+re_series = re.compile(r'Series: <a href="/series/.*>(.*)</a>')
 imgname = '{:03}.jpg'
+titlefmt = '{title} - {author} - {series}'
 
 def get_html(url):
     conn = urllib.request.urlopen(url)
@@ -53,7 +57,22 @@ def get_pages(url):
     return int(match.group(1))
 
 
+def get_folder(url):
+    """Get default folder name"""
+    page = url
+    html = get_html(page)
+    tit = re_title.search(html)
+    aut = re_author.search(html)
+    ser = re_series.search(html)
+    if not tit or not aut or not ser:
+        raise ParsingError(html)
+    return titlefmt.format(title=tit.group(1), author=aut.group(1),
+            series=ser.group(1))
+
+
 def dl(url, dir):
+    if dir == '':
+        dir = get_folder(url)
     print("Save: " + url)
     print("Here: " + dir)
     loc = get_loc(url)
@@ -141,17 +160,18 @@ def main(*args):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-g', dest='gui', action='store_true', default=False)
     parser.add_argument('url', nargs='?')
-    parser.add_argument('name', nargs='?')
+    parser.add_argument('name', nargs='?', default='')
     args = parser.parse_args(args)
     
     if args.gui:
         app = App()
         app.mainloop()
     else:
-        try:
+        if not hasattr(args, 'url'):
+            print('No URL')
+            sys.exit(1)
+        else:
             dl(args.url, args.name)
-        except NameError as e:
-            raise e
 
 
 if __name__ == "__main__":
