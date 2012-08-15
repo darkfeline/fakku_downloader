@@ -18,7 +18,7 @@ re_title = re.compile(r'<h1 itemprop="name">(.*)</h1>')
 re_author = re.compile(r'<a href="/artists/.*>(.*)</a></div>')
 re_series = re.compile(r'Series: <a href="/series/.*>(.*)</a>')
 imgname = '{:03}.jpg'
-titlefmt = '{title} - {author} - {series}'
+titlefmt = '{title}'
 
 def get_html(url):
     conn = urllib.request.urlopen(url)
@@ -117,6 +117,7 @@ class App:
         self.url_label = Label(row1, text='URL')
         self.url_label.pack(side=LEFT)
         self.url = Entry(row1)
+        self.name.bind('<Return>', self.dl)
         self.url.pack(side=LEFT)
 
         self.name_label = Label(row2, text='Name')
