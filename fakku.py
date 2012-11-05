@@ -132,7 +132,7 @@ class App:
         self.output = Display(row4)
         self.output.pack()
         sys.stdout = self.output
-        #sys.stderr = self.output
+        sys.stderr = self.output
 
     def entry_selectall(self, event):
         event.widget.select_range(0, END)
