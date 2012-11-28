@@ -160,8 +160,8 @@ def main(*args):
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-g', dest='gui', action='store_true', default=False)
+    parser.add_argument('-n', '--name', default='')
     parser.add_argument('url', nargs='?')
-    parser.add_argument('name', nargs='?', default='')
     args = parser.parse_args(args)
     
     if args.gui:
