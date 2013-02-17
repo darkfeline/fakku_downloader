@@ -13,7 +13,7 @@ import sys
 from tkinter import *
 
 re_pages = re.compile(r'<b>([0-9]+)</b> pages')
-re_url = re.compile(r"return '(.+?)' \+ x \+ '\.jpg';")
+re_url = re.compile(r"return ?'(.+?)' ?\+ ?x ?\+ ?'\.jpg';")
 re_title = re.compile(r'<h1 itemprop="name">(.*)</h1>')
 re_author = re.compile(r'<a href="/artists/.*>(.*)</a></div>')
 re_series = re.compile(r'Series: <a href="/series/.*>(.*)</a>')
