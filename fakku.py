@@ -20,6 +20,7 @@ re_series = re.compile(r'Series: <a href="/series/.*>(.*)</a>')
 imgname = '{:03}.jpg'
 titlefmt = '{title}'
 
+
 def get_html(url):
     conn = urllib.request.urlopen(url)
     data = conn.read()
@@ -66,8 +67,8 @@ def get_folder(url):
     ser = re_series.search(html)
     if not tit or not aut or not ser:
         raise ParsingError(html)
-    return titlefmt.format(title=tit.group(1), author=aut.group(1),
-            series=ser.group(1))
+    return titlefmt.format(
+        title=tit.group(1), author=aut.group(1), series=ser.group(1))
 
 
 def dl(url, dir=None):
@@ -102,8 +103,8 @@ class App:
     def __init__(self):
         self.root = Tk()
         self.root.wm_title("Fakku Downloader")
-        self.root.bind_class("Text","<Control-a>", self.display_selectall)
-        self.root.bind_class("Entry","<Control-a>", self.entry_selectall)
+        self.root.bind_class("Text", "<Control-a>", self.display_selectall)
+        self.root.bind_class("Entry", "<Control-a>", self.entry_selectall)
 
         row1 = Frame(self.root)
         row1.pack(side=TOP)
@@ -147,7 +148,7 @@ class App:
         self.root.quit()
 
     def dl(self, *args):
-        dl(self.url.get(), self.name.get())        
+        dl(self.url.get(), self.name.get())
 
 
 class ParsingError(Exception):
@@ -163,7 +164,7 @@ def main(*args):
     parser.add_argument('-n', '--name', default='')
     parser.add_argument('url', nargs='?')
     args = parser.parse_args(args)
-    
+
     if args.gui:
         app = App()
         app.mainloop()
@@ -176,5 +177,4 @@ def main(*args):
 
 
 if __name__ == "__main__":
-    import sys
     main(*sys.argv[1:])
