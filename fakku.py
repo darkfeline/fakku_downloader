@@ -70,8 +70,8 @@ def get_folder(url):
             series=ser.group(1))
 
 
-def dl(url, dir):
-    if dir == '':
+def dl(url, dir=None):
+    if not dir:
         dir = get_folder(url)
     print("Save: " + url)
     print("Here: " + dir)
