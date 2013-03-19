@@ -162,12 +162,18 @@ def main(*args):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-g', dest='gui', action='store_true', default=False)
     parser.add_argument('-n', '--name', default='')
+    parser.add_argument('-l', '--list', default=None)
     parser.add_argument('url', nargs='?')
     args = parser.parse_args(args)
 
     if args.gui:
         app = App()
         app.mainloop()
+    elif args.list:
+        with open(args.list) as f:
+            for line in f:
+                line = line.rstrip()
+                dl(line)
     else:
         if not hasattr(args, 'url'):
             print('No URL')
