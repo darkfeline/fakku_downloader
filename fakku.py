@@ -23,7 +23,7 @@ imgname = '{:03}.jpg'
 titlefmt = '{title}'
 # this tells us the amount of attempts to download a image if the Download fails due a HTTP protocol error 
 # as example if you get a error 504 or similar (gateway error.) 
-retry_attempts=3;
+retry_attempts = 3
 
 
 def get_html(url):
@@ -36,20 +36,20 @@ def get_html(url):
 
 def save(url, path):
     current_try=0
-	while current_try < retry_attempts:
-		try:
-			conn = urllib.request.urlopen(url)
-			data = conn.read()
-			conn.close()
-			if os.path.exists(path):
-				raise IOError('File exists.')
-			with open(path, 'wb') as f:
-				f.write(data)
-			break
-		except urllib.error.HTTPError as detail:
-			print('HTTP Error details: ', detail)
-			current_try=current_try+1
-			pass
+    while current_try < retry_attempts:
+        try:
+            conn = urllib.request.urlopen(url)
+            data = conn.read()
+            conn.close()
+            if os.path.exists(path):
+                raise IOError('File exists.')
+            with open(path, 'wb') as f:
+                f.write(data)
+            break
+        except urllib.error.HTTPError as detail:
+            print('HTTP Error details: ', detail)
+            current_try += 1
+	    continue
 
 def get_loc(url):
     """Get image location url"""
