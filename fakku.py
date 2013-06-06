@@ -3,6 +3,10 @@
 """
 Python Fakku Downloader
 
+Author: darkfeline
+Contributors (in no particular order):
+    silencio200
+
 """
 
 import urllib.request
@@ -71,7 +75,7 @@ def get_folder(url):
         title=tit.group(1), author=aut.group(1), series=ser.group(1))
 
 
-def dl(url, dir=None):
+def dl(url, dir=None, max_tries=3):
     if not dir:
         dir = get_folder(url)
     print("Save: " + url)
@@ -82,9 +86,23 @@ def dl(url, dir=None):
         raise IOError('File exists.')
     os.mkdir(dir)
     for i in range(1, npages + 1):
-        save(loc + imgname.format(i), os.path.join(dir, imgname.format(i)))
-        print('downloaded {}'.format(i))
-    print('done.')
+        success = False
+        for j in range(max_tries):
+            try:
+                save(
+                    loc + imgname.format(i),
+                    os.path.join(dir, imgname.format(i)))
+            except urllib.error.HTTPError as e:
+                print('HTTP Error details: ', e)
+                continue
+            else:
+                success = True
+                break
+        if success:
+            print('Downloaded {}'.format(i))
+        else:
+            print('Failed to download {}'.format(i))
+    print('Done.')
 
 
 class Display(Text):
@@ -160,7 +178,12 @@ def main(*args):
     import argparse
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('-g', dest='gui', action='store_true', default=False)
+    parser.add_argument(
+        '-g', dest='gui', action='store_true', default=False,
+        help='Starts the Graphical User Interface')
+    parser.add_argument(
+        '-t', dest='attempts', type=int, default=3,
+        help='Max number of download attempts per image')
     parser.add_argument('-n', '--name', default='')
     parser.add_argument('-l', '--list', default=None)
     parser.add_argument('url', nargs='?')
@@ -173,7 +196,7 @@ def main(*args):
         with open(args.list) as f:
             for line in f:
                 line = line.rstrip()
-                dl(line)
+                dl(line, args.attempts)
     else:
         if not hasattr(args, 'url'):
             print('No URL')
