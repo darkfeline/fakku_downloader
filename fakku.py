@@ -196,13 +196,13 @@ def main(*args):
         with open(args.list) as f:
             for line in f:
                 line = line.rstrip()
-                dl(line, args.attempts)
+                dl(line, None, args.attempts)
     else:
         if not hasattr(args, 'url'):
             print('No URL')
             sys.exit(1)
         else:
-            dl(args.url, args.name)
+            dl(args.url, args.name, args.attempts)
 
 
 if __name__ == "__main__":
