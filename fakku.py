@@ -35,7 +35,7 @@ def get_html(url):
 
 
 def save(url, path):
-    current_try=0
+    current_try = 0
     while current_try < retry_attempts:
         try:
             conn = urllib.request.urlopen(url)
