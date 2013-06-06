@@ -6,6 +6,8 @@ Python Fakku Downloader
 Author: darkfeline
 Contributors (in no particular order):
     silencio200
+    sciwhiz
+    mushee
 
 """
 
