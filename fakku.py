@@ -49,7 +49,7 @@ def save(url, path):
         except urllib.error.HTTPError as detail:
             print('HTTP Error details: ', detail)
             current_try += 1
-	    continue
+            continue
 
 def get_loc(url):
     """Get image location url"""
