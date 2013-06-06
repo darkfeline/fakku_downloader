@@ -21,9 +21,11 @@ re_author = re.compile(r'<a href="/artists/.*>(.*)</a></div>')
 re_series = re.compile(r'Series: <a href="/series/.*>(.*)</a>')
 imgname = '{:03}.jpg'
 titlefmt = '{title}'
-# this tells us the amount of attempts to download a image if the Download fails due a HTTP protocol error 
-# as example if you get a error 504 or similar (gateway error.) 
-retry_attempts = 3
+# this tells us the amount of attempts to download a image if the Download fails due a HTTP protocol error
+# as example if you get a error 504 or similar (gateway error.)
+DEFAULT_RETRY = 3
+retry_attempts = DEFAULT_RETRY
+MAX_RETRY = 10
 
 
 def get_html(url):
@@ -33,8 +35,12 @@ def get_html(url):
     data = data.decode('UTF-8')
     return data
 
+def setAttempts(NewAttempts):
+    retry_attempts = NewAttempts
+    
 
 def save(url, path):
+    success = False
     current_try = 0
     while current_try < retry_attempts:
         try:
@@ -45,11 +51,13 @@ def save(url, path):
                 raise IOError('File exists.')
             with open(path, 'wb') as f:
                 f.write(data)
+            success = True
             break
         except urllib.error.HTTPError as detail:
             print('HTTP Error details: ', detail)
             current_try += 1
             continue
+    return success
 
 def get_loc(url):
     """Get image location url"""
@@ -94,8 +102,11 @@ def dl(url, dir=None):
         raise IOError('File exists.')
     os.mkdir(dir)
     for i in range(1, npages + 1):
-        save(loc + imgname.format(i), os.path.join(dir, imgname.format(i)))
-        print('downloaded {}'.format(i))
+        success = save(loc + imgname.format(i), os.path.join(dir, imgname.format(i)))
+        if success:
+            print('downloaded {}'.format(i))
+        else:
+            print('Fail to download {}'.format(i))
     print('done.')
 
 
@@ -172,12 +183,21 @@ def main(*args):
     import argparse
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('-g', dest='gui', action='store_true', default=False)
+    tmp_help = "Starts the Graphical User Interface"
+    parser.add_argument('-g', dest='gui', action='store_true', default=False,
+                        help=tmp_help)
+    tmp_help = "Amount of download Attempts per Image(MAX {})".format(MAX_RETRY)
+    parser.add_argument('-t', dest='attempts', type=int, default=DEFAULT_RETRY,
+                        help=tmp_help)
     parser.add_argument('-n', '--name', default='')
     parser.add_argument('-l', '--list', default=None)
     parser.add_argument('url', nargs='?')
     args = parser.parse_args(args)
 
+    if args.attempts > 0 and args.attempts <= MAX_RETRY:
+        setAttempts(args.attempts)
+    else:
+        print('Using Default: ', DEFAULT_RETRY)
     if args.gui:
         app = App()
         app.mainloop()
