@@ -201,7 +201,8 @@ def main(*args):
                 dl(line, None, args.attempts)
     else:
         if args.url is None:
-            print('No URL')
+            print('No URL\n')
+            parser.print_help()
             sys.exit(1)
         else:
             dl(args.url, args.name, args.attempts)
