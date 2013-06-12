@@ -200,7 +200,7 @@ def main(*args):
                 line = line.rstrip()
                 dl(line, None, args.attempts)
     else:
-        if not hasattr(args, 'url'):
+        if args.url is None:
             print('No URL')
             sys.exit(1)
         else:
