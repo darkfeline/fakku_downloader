@@ -85,7 +85,7 @@ def dl(url, dir=None, max_tries=3):
     loc = get_loc(url)
     npages = get_pages(url)
     if os.path.exists(dir):
-        raise IOError('File exists.')
+        print('Warning: Directory {} already exists.'.format(dir))
     os.mkdir(dir)
     for i in range(1, npages + 1):
         success = False
@@ -97,6 +97,8 @@ def dl(url, dir=None, max_tries=3):
             except urllib.error.HTTPError as e:
                 print('HTTP Error details: ', e)
                 continue
+            except FileExistsError:
+                print('{} exists; skipping'.format(i))
             else:
                 success = True
                 break
