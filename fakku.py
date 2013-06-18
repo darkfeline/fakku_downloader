@@ -40,7 +40,7 @@ def save(url, path):
     data = conn.read()
     conn.close()
     if os.path.exists(path):
-        raise IOError('File exists.')
+        raise FileExistsError('File exists.')
     with open(path, 'wb') as f:
         f.write(data)
 
