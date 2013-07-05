@@ -100,6 +100,7 @@ def dl(url, dir=None, max_tries=3):
                 continue
             except FileExistsError:
                 print('{} exists; skipping'.format(i))
+                break
             else:
                 success = True
                 break
