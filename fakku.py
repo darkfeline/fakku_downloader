@@ -100,13 +100,13 @@ def dl(url, dir=None, max_tries=3):
                 continue
             except FileExistsError:
                 print('{} exists; skipping'.format(i))
-                break
-            else:
                 success = True
                 break
-        if success:
-            print('Downloaded {}'.format(i))
-        else:
+            else:
+                print('Downloaded {}'.format(i))
+                success = True
+                break
+        if not success:
             print('Failed to download {}'.format(i))
     print('Done.')
 
