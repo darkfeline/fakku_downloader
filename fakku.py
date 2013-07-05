@@ -86,7 +86,8 @@ def dl(url, dir=None, max_tries=3):
     npages = get_pages(url)
     if os.path.exists(dir):
         print('Warning: Directory {} already exists.'.format(dir))
-    os.mkdir(dir)
+    else:
+        os.mkdir(dir)
     for i in range(1, npages + 1):
         success = False
         for j in range(max_tries):
