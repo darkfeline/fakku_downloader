@@ -87,6 +87,20 @@ def get_folder(url):
 
 
 def dl(url, dir=None, max_tries=3):
+    """Download Fakku manga.
+
+    Parameters
+    ----------
+    url : str
+        URL of manga base page
+    dir : str or None, optional
+        Directory to save files.  If dir is None, save files to the
+        directory with the same name as the manga.  In both cases, make
+        the directory if necessary.  Default is None.
+    max_tries : int
+        Max number of retries per image before giving up.  Default is 3.
+
+    """
     if not dir:
         dir = get_folder(url)
     print("Save: " + url)
