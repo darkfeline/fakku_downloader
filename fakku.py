@@ -13,10 +13,13 @@ Contributors (in no particular order):
 
 import urllib.request
 import os.path
+import logging
 import os
 import re
 import sys
 from tkinter import *
+
+logger = logging.getLogger(__name__)
 
 re_pages = re.compile(r'<b>([0-9]+)</b> pages')
 re_url = re.compile(r"return ?'(.+?)' ?\+ ?x ?\+ ?'\.jpg';")
@@ -36,6 +39,7 @@ def get_html(url):
 
 
 def save(url, path):
+    logger.debug('save(%r, %r)', url, path)
     conn = urllib.request.urlopen(url)
     data = conn.read()
     conn.close()
@@ -194,6 +198,8 @@ def main(*args):
     parser.add_argument('-l', '--list', default=None)
     parser.add_argument('url', nargs='?')
     args = parser.parse_args(args)
+
+    logging.basicConfig(level='WARNING')
 
     if args.gui:
         app = App()
