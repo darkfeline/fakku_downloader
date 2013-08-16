@@ -12,6 +12,7 @@ Contributors (in no particular order):
 """
 
 import urllib.request
+import urllib.parse
 import os.path
 import logging
 import os
@@ -40,6 +41,10 @@ def get_html(url):
 
 def save(url, path):
     logger.debug('save(%r, %r)', url, path)
+    url = urllib.parse.urlsplit(url)
+    url = list(url)
+    url[2] = urllib.parse.quote(url[2])
+    url = urllib.parse.urlunsplit(url)
     conn = urllib.request.urlopen(url)
     data = conn.read()
     conn.close()
