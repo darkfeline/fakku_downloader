@@ -31,13 +31,15 @@ imgname = '{:03}.jpg'
 titlefmt = '{title}'
 
 
+
+
 def get_html(url):
-    conn = urllib.request.urlopen(url)
+    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    conn = urllib.request.urlopen(req)
     data = conn.read()
     conn.close()
     data = data.decode('UTF-8')
     return data
-
 
 def save(url, path):
     logger.debug('save(%r, %r)', url, path)
@@ -45,7 +47,8 @@ def save(url, path):
     url = list(url)
     url[2] = urllib.parse.quote(url[2])
     url = urllib.parse.urlunsplit(url)
-    conn = urllib.request.urlopen(url)
+    requ = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    conn = urllib.request.urlopen(requ)
     data = conn.read()
     conn.close()
     if os.path.exists(path):
